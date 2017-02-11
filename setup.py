@@ -35,7 +35,7 @@ extras_require = {
 
 kw = {
     'name':                 'ansimarkup',
-    'version':              '0.0.0',
+    'version':              '0.1.1',
 
     'description':          'Produce colored terminal text with an xml-like markup',
     'long_description':     open('README.rst').read(),

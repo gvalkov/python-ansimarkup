@@ -3,7 +3,7 @@ Ansimarkup
 
 .. class:: no-web no-pdf
 
-|pypi| |build|
+|pypi| |build| |license|
 
 
 Ansimarkup is an XML-like markup for producing colored terminal text.
@@ -103,6 +103,10 @@ Ansimarkup is released under the terms of the `Revised BSD License`_.
 .. |pypi| image:: https://img.shields.io/pypi/v/ansimarkup.svg?style=flat-square&label=latest%20stable%20version
     :target: https://pypi.python.org/pypi/ansimarkup
     :alt: Latest version released on PyPi
+
+.. |license| image:: https://img.shields.io/pypi/l/ansimarkup.svg?style=flat-square&label=license
+    :target: https://pypi.python.org/pypi/ansimarkup
+    :alt: BSD 3-Clause
 
 .. |build| image:: https://img.shields.io/travis/gvalkov/python-ansimarkup/master.svg?style=flat-square&label=build
     :target: http://travis-ci.org/gvalkov/python-ansimarkup

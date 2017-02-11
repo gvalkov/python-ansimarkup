@@ -30,8 +30,6 @@ The latest stable version of ansimarkup can be installed from pypi:
 Usage
 -----
 
-An annotated usage example:
-
 .. code-block:: python
 
   from ansimarkup import parse, ansiprint
@@ -65,10 +63,38 @@ An annotated usage example:
 
 For a list of markup tags, please refer to `tags.py`_.
 
-Ansimarkup may also be used as a command-line script::
+
+Command-line
+~~~~~~~~~~~~
+
+Ansimarkup may also be used as a command-line script. This works as if all
+arguments were passed to `ansiprint()`::
 
   $ python -m ansimarkup "<b>bold</b>" "<red>red</red>"
 
+
+Logging formatter
+~~~~~~~~~~~~~~~~~
+
+Ansimarkup also comes with a formatter for the standard library `logging`
+module. It can be used as:
+
+.. code-block:: python
+
+  import logging
+  from ansimarkup.logformatter import AnsiMarkupFormatter
+
+  log = logging.getLogger()
+  hdl = logging.StreamHandler()
+  fmt = AnsiMarkupFormatter()
+  hdl.setFormatter(fmt)
+  log.addHandler(hdl)
+
+  log.info("<b>bold text</b>")
+
+
+Windows
+~~~~~~~
 
 Ansimarkup uses the colorama_ library internally, which means that Windows
 support for ansi escape sequences is available by first running:
@@ -80,6 +106,7 @@ support for ansi escape sequences is available by first running:
 
 For more information on Windows support, consult the "Usage" section of the
 colorama_ documentation.
+
 
 Limitations
 -----------

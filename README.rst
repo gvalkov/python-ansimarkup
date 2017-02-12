@@ -68,7 +68,7 @@ Command-line
 ~~~~~~~~~~~~
 
 Ansimarkup may also be used as a command-line script. This works as if all
-arguments were passed to `ansiprint()`::
+arguments were passed to ``ansiprint()``::
 
   $ python -m ansimarkup "<b>bold</b>" "<red>red</red>"
 
@@ -108,12 +108,32 @@ For more information on Windows support, consult the "Usage" section of the
 colorama_ documentation.
 
 
+Performance
+-----------
+
+While the focus of ansimarkup is convenience, it does try to keep processing to
+a minimum. The `benchmark.py`_ script attempts to benchmark different ansi
+escape code libraries::
+
+  Benchmark 1: <r><b>red bold</b></r>
+    colorama     0.3511 μs
+    termcolor    3.8165 μs
+    colr         4.4690 μs
+    ansimarkup   5.6648 μs
+
+  Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
+    colorama     0.8295 μs
+    ansimarkup   8.7470 μs
+    termcolor    8.9415 μs
+    colr         9.7882 μs
+
+
 Limitations
 -----------
 
 Ansimarkup is a simple wrapper around colorama. It does very little in the way
-of validating that markup strings are valid. This is a conscious decision with
-the goal of keeping things simple and fast.
+of validating that markup strings are well-formed. This is a conscious decision
+with the goal of keeping things simple and fast.
 
 Unbalanced nesting, such as in the following example, will produce incorrect
 output::
@@ -140,5 +160,7 @@ Ansimarkup is released under the terms of the `Revised BSD License`_.
     :alt: Build status
 
 .. _tags.py:   https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/tags.py
+.. _benchmark.py:   https://github.com/gvalkov/python-ansimarkup/blob/master/tests/benchmark.py
+
 .. _colorama:  https://pypi.python.org/pypi/colorama
 .. _`Revised BSD License`: https://raw.github.com/gvalkov/python-ansimarkup/master/LICENSE

@@ -33,6 +33,11 @@ def test_errors():
 		p('<b>1</d>')
 
 
+def test_strip(am):
+	assert am.strip('<b>1</b>2<d>3</d>') == '123'
+	assert am.strip('<bold,red,yellow>1</bold,red,yellow>') == '1'
+
+
 @mark.xfail
 def test_limitations():
 	assert p('<r><Y>1</r>2</Y>') == F.RED + B.YELLOW + '1' + S.RESET_ALL + B.YELLOW + '2' + S.RESET_ALL

@@ -17,6 +17,25 @@ class AnsiMarkup:
     re_tag_start = re.compile(r'<([^/>]+)>')
     re_tag_end   = re.compile(r'</([^>]+)>')
 
+    def parse(self, text):
+        tags, results = [], []
+
+        text = self.re_tag_start.sub(lambda m: self.sub_start(m, tags, results), text)
+        text = self.re_tag_end.sub(lambda m: self.sub_end(m, tags, results), text)
+        return text
+
+    def ansiprint(self, *args, **kwargs):
+        args = (self.parse(str(i)) for i in args)
+        builtins.print(*args, **kwargs)
+
+    def strip(self, text):
+        '''Return string with markup tags removed.'''
+
+        # TODO: This also strips unknown tags.
+        text = self.re_tag_start.sub('', text)
+        text = self.re_tag_end.sub('', text)
+        return text
+
     def __call__(self, text):
         return self.parse(text)
 
@@ -74,14 +93,3 @@ class AnsiMarkup:
             return style['reset']
 
         return match.group()
-
-    def parse(self, text):
-        tags, results = [], []
-
-        text = self.re_tag_start.sub(lambda m: self.sub_start(m, tags, results), text)
-        text = self.re_tag_end.sub(lambda m: self.sub_end(m, tags, results), text)
-        return text
-
-    def ansiprint(self, *args, **kwargs):
-        args = (self.parse(str(i)) for i in args)
-        builtins.print(*args, **kwargs)

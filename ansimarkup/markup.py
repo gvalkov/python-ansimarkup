@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import re
 
+from colorama import Style
+
 from .tags import style, background, foreground, all_tags
 from .compat import builtins
 
@@ -27,8 +29,8 @@ class AnsiMarkup:
         text = self.re_tag_end.sub(lambda m: self.sub_end(m, tags, results), text)
 
         if self.always_reset:
-            if not text.endswith(style['reset']):
-                text += style['reset']
+            if not text.endswith(Style.RESET_ALL):
+                text += Style.RESET_ALL
 
         return text
 
@@ -95,8 +97,8 @@ class AnsiMarkup:
 
             del tag_list[idx]
             del res_list[idx]
-            return style['reset'] + res
+            return Style.RESET_ALL + res
         else:
-            return style['reset']
+            return Style.RESET_ALL
 
         return match.group()

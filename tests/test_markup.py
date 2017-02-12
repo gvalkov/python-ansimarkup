@@ -38,6 +38,14 @@ def test_strip(am):
 	assert am.strip('<bold,red,yellow>1</bold,red,yellow>') == '1'
 
 
+def test_options():
+	am = AnsiMarkup(always_reset=True)
+	am.parse('<b>1') == S.BRIGHT + '1' + S.RESET_ALL
+
+	am = AnsiMarkup(always_reset=False)
+	am.parse('<b>1') == S.BRIGHT + '1'
+
+
 @mark.xfail
 def test_limitations():
 	assert p('<r><Y>1</r>2</Y>') == F.RED + B.YELLOW + '1' + S.RESET_ALL + B.YELLOW + '2' + S.RESET_ALL

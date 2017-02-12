@@ -17,11 +17,19 @@ class AnsiMarkup:
     re_tag_start = re.compile(r'<([^/>]+)>')
     re_tag_end   = re.compile(r'</([^>]+)>')
 
+    def __init__(self, always_reset=False):
+        self.always_reset = always_reset
+
     def parse(self, text):
         tags, results = [], []
 
         text = self.re_tag_start.sub(lambda m: self.sub_start(m, tags, results), text)
         text = self.re_tag_end.sub(lambda m: self.sub_end(m, tags, results), text)
+
+        if self.always_reset:
+            if not text.endswith(style['reset']):
+                text += style['reset']
+
         return text
 
     def ansiprint(self, *args, **kwargs):
@@ -88,7 +96,6 @@ class AnsiMarkup:
             del tag_list[idx]
             del res_list[idx]
             return style['reset'] + res
-
         else:
             return style['reset']
 

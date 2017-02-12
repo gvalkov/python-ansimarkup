@@ -46,6 +46,17 @@ def test_options():
 	am.parse('<b>1') == S.BRIGHT + '1'
 
 
+def test_usertags():
+	user_tags = {
+		'info': F.GREEN + S.BRIGHT,
+		'call': lambda: F.BLUE + B.RED
+	}
+	am = AnsiMarkup(tags=user_tags)
+
+	assert am.parse('<info>1</info>') == F.GREEN + S.BRIGHT + '1' + S.RESET_ALL
+	assert am.parse('<call>1</call>') == F.BLUE  + B.RED + '1' + S.RESET_ALL
+
+
 @mark.xfail
 def test_limitations():
 	assert p('<r><Y>1</r>2</Y>') == F.RED + B.YELLOW + '1' + S.RESET_ALL + B.YELLOW + '2' + S.RESET_ALL

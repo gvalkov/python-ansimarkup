@@ -19,7 +19,8 @@ class AnsiMarkup:
     re_tag_start = re.compile(r'<([^/>]+)>')
     re_tag_end   = re.compile(r'</([^>]+)>')
 
-    def __init__(self, always_reset=False):
+    def __init__(self, tags=None, always_reset=False):
+        self.user_tags = tags if tags else {}
         self.always_reset = always_reset
 
     def parse(self, text):
@@ -52,8 +53,13 @@ class AnsiMarkup:
     def sub_start(self, match, tag_list, res_list):
         tag = match.group(1)
 
+        # User-defined tags take preference over all other.
+        if tag in self.user_tags:
+            utag = self.user_tags[tag]
+            res = utag() if callable(utag) else utag
+
         # Substitute on a direct match.
-        if tag in all_tags:
+        elif tag in all_tags:
             res = all_tags[tag]
 
         # An alternative syntax for setting the foreground color (e.g. <fg red>).

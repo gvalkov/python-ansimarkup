@@ -61,6 +61,13 @@ Usage
   # Unrecognized tags are left as-is.
   parse("<b><element1></element1></b>")
 
+  # User-defined tags and more options are available through the AnsiMarkup class.
+  from ansimarkup import AnsiMarkup
+
+  user_tags = {'info': '\x1b[32m\x1b[1m'}
+  am = AnsiMarkup(tags=user_tags)
+  am.parse('<info>bold green</info>')
+
 For a list of markup tags, please refer to `tags.py`_.
 
 

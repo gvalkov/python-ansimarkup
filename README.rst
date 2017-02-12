@@ -123,16 +123,18 @@ a minimum. The `benchmark.py`_ script attempts to benchmark different ansi
 escape code libraries::
 
   Benchmark 1: <r><b>red bold</b></r>
-    colorama     0.3511 μs
-    termcolor    3.8165 μs
-    colr         4.4690 μs
-    ansimarkup   5.6648 μs
+    colorama     0.2989 μs
+    termcolor    4.0244 μs
+    colr         4.7062 μs
+    ansimarkup   6.2013 μs
+    pastel       28.7985 μs
 
   Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
-    colorama     0.8295 μs
-    ansimarkup   8.7470 μs
-    termcolor    8.9415 μs
-    colr         9.7882 μs
+    colorama     0.8288 μs
+    ansimarkup   9.3304 μs
+    termcolor    9.3599 μs
+    colr         9.6896 μs
+    pastel       63.2432 μs
 
 
 Limitations
@@ -163,6 +165,12 @@ Todo
   efficient (i.e. something like an ordered MultiDict).
 
 
+Similar libraries
+-----------------
+
+- pastel_: bring colors to your terminal
+
+
 License
 -------
 
@@ -185,4 +193,5 @@ Ansimarkup is released under the terms of the `Revised BSD License`_.
 .. _benchmark.py:   https://github.com/gvalkov/python-ansimarkup/blob/master/tests/benchmark.py
 
 .. _colorama:  https://pypi.python.org/pypi/colorama
+.. _pastel:    https://github.com/sdispater/pastel
 .. _`Revised BSD License`: https://raw.github.com/gvalkov/python-ansimarkup/master/LICENSE

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Benchmark different terminal color libraries.
 
@@ -13,7 +15,8 @@ def benchmark(stmt, n=1000, r=3):
         'from ansimarkup import parse;'
         'from colorama import Style as S, Fore as F;'
         'from termcolor import colored;'
-        'from colr import color'
+        'from colr import color;'
+        'from pastel import colorize'
     )
     timer = Timer(stmt, setup=setup)
     best = min(timer.repeat(r, n))
@@ -34,6 +37,7 @@ tests_simple_1 = {
     'colorama':   'S.BRIGHT + F.RED + "red bold" + S.RESET_ALL',
     'colr':       'color("red bold", fore="red", style="bright")',
     'ansimarkup': 'parse("<r><b>red bold</b>")',
+    'pastel':     'colorize("<fg=red;options=bold>red bold</>")',
 }
 
 tests_simple_2 = {
@@ -45,6 +49,8 @@ tests_simple_2 = {
         'color("red bold", fore="red", style="bright") + color("red", fore="red") + color("bold", style="bright")',
     'ansimarkup':
         'parse("<r><b>red bold</b>red</r><b>bold</b>")',
+    'pastel':
+        'colorize("<fg=red;options=bold>red bold</><fg=red>red</><options=bold>red</>")',
 }
 
 run_tests("Benchmark 1: <r><b>red bold</b></r>", tests_simple_1)

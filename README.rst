@@ -148,6 +148,21 @@ output::
   <r><Y>1</r>2</Y>
 
 
+Todo
+----
+
+- Many corner cases remain to be fixed.
+
+- The documentation needs to be moved from the readme to a sphinx doc.
+
+- More docstrings and comments.
+
+- The testsuite is very superficial.
+
+- The ``tag_list.index`` in ``sub_end`` can be replaced with something more
+  efficient (i.e. something like an ordered MultiDict).
+
+
 License
 -------
 

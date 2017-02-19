@@ -3,7 +3,7 @@
 '''
 Benchmark different terminal color libraries.
 
-pip install termcolor colorama colr ansimarkup
+pip install termcolor colorama colr ansimarkup pastel plumbum
 '''
 
 from __future__ import print_function
@@ -16,6 +16,7 @@ def benchmark(stmt, n=1000, r=3):
         'from colorama import Style as S, Fore as F;'
         'from termcolor import colored;'
         'from colr import color;'
+        'from plumbum import colors;'
         'from pastel import colorize'
     )
     timer = Timer(stmt, setup=setup)
@@ -36,8 +37,9 @@ tests_simple_1 = {
     'termcolor':  'colored("red bold", "red", attrs=["bold"])',
     'colorama':   'S.BRIGHT + F.RED + "red bold" + S.RESET_ALL',
     'colr':       'color("red bold", fore="red", style="bright")',
-    'ansimarkup': 'parse("<r><b>red bold</b>")',
+    'ansimarkup': 'parse("<r><b>red bold</b></r>")',
     'pastel':     'colorize("<fg=red;options=bold>red bold</>")',
+    'plumbum':    'colors.red | colors.bold | "red bold"',
 }
 
 tests_simple_2 = {
@@ -51,6 +53,8 @@ tests_simple_2 = {
         'parse("<r><b>red bold</b>red</r><b>bold</b>")',
     'pastel':
         'colorize("<fg=red;options=bold>red bold</><fg=red>red</><options=bold>red</>")',
+    'plumbum':
+        '(colors.red + colors.bold | "red bold") + (colors.red | "red") + (colors.bold | "bold")',
 }
 
 run_tests("Benchmark 1: <r><b>red bold</b></r>", tests_simple_1)

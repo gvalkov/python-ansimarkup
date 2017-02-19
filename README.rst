@@ -123,18 +123,20 @@ a minimum. The `benchmark.py`_ script attempts to benchmark different ansi
 escape code libraries::
 
   Benchmark 1: <r><b>red bold</b></r>
-    colorama     0.2989 μs
-    termcolor    4.0244 μs
-    colr         4.7062 μs
-    ansimarkup   6.2013 μs
-    pastel       28.7985 μs
+    colorama     0.2998 μs
+    termcolor    3.2339 μs
+    colr         3.6483 μs
+    ansimarkup   6.8679 μs
+    pastel       28.8538 μs
+    plumbum      53.5004 μs
 
   Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
-    colorama     0.8288 μs
-    ansimarkup   9.3304 μs
-    termcolor    9.3599 μs
-    colr         9.6896 μs
-    pastel       63.2432 μs
+    colorama     0.8269 μs
+    termcolor    8.9296 μs
+    ansimarkup   9.3099 μs
+    colr         9.6244 μs
+    pastel       62.2018 μs
+    plumbum      120.8048 μs
 
 
 Limitations
@@ -169,6 +171,7 @@ Similar libraries
 -----------------
 
 - pastel_: bring colors to your terminal
+- `plumbum.colors`_: small yet feature-rich library for shell script-like programs in Python
 
 
 License
@@ -189,9 +192,11 @@ Ansimarkup is released under the terms of the `Revised BSD License`_.
     :target: http://travis-ci.org/gvalkov/python-ansimarkup
     :alt: Build status
 
-.. _tags.py:   https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/tags.py
+
+.. _tags.py:        https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/tags.py
 .. _benchmark.py:   https://github.com/gvalkov/python-ansimarkup/blob/master/tests/benchmark.py
 
-.. _colorama:  https://pypi.python.org/pypi/colorama
-.. _pastel:    https://github.com/sdispater/pastel
+.. _colorama:       https://pypi.python.org/pypi/colorama
+.. _pastel:         https://github.com/sdispater/pastel
+.. _plumbum.colors: https://plumbum.readthedocs.io/en/latest/cli.html#colors
 .. _`Revised BSD License`: https://raw.github.com/gvalkov/python-ansimarkup/master/LICENSE

@@ -16,10 +16,11 @@ class MismatchedTag(AnsiMarkupError):
 
 
 class AnsiMarkup:
-    re_tag_start = re.compile(r'<([^/>]+)>')
-    re_tag_end   = re.compile(r'</([^>]+)>')
+    '''
+    Produce colored terminal text with a tag-based markup.
+    '''
 
-    def __init__(self, tags=None, always_reset=False):
+    def __init__(self, tags=None, always_reset=False, tag_sep='<>'):
         '''
         Arguments
         ---------
@@ -28,9 +29,13 @@ class AnsiMarkup:
            they will be substituted with.
         always_reset: bool
            Whether or not ``parse()`` should always end strings with a reset code.
+        tag_sep: str
+           The opening and closing characters of each tag (e.g. ``<>``, ``{}``).
         '''
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
+
+        self.re_tag_start, self.re_tag_end = self.compile_tag_regex(tag_sep)
 
     def parse(self, text):
         '''Return a string with markup tags converted to ansi-escape sequences.'''
@@ -118,3 +123,20 @@ class AnsiMarkup:
             return Style.RESET_ALL
 
         return match.group()
+
+    def compile_tag_regex(self, tag_sep):
+        # Optimize the default:
+        if tag_sep == '<>':
+            tag_start = re.compile(r'<([^/>]+)>')
+            tag_end   = re.compile(r'</([^>]+)>')
+            return tag_start, tag_end
+
+        if len(tag_sep) < 2:
+            raise ValueError('tag_sep needs to have at least two element (e.g. "<>")')
+
+        if tag_sep[0] == tag_sep[1]:
+            raise ValueError('opening and closing characters cannot be the same')
+
+        tag_start = r'{0}([^/{1}]+){1}'.format(tag_sep[0], tag_sep[1])
+        tag_end   = r'{0}/([^{1}]+){1}'.format(tag_sep[0], tag_sep[1])
+        return re.compile(tag_start), re.compile(tag_end)

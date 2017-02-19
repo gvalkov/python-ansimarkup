@@ -106,6 +106,21 @@ Custom tags or overrides for existing tags may be defined by creating a new
   am('<b>bold</b>') == am.parse('<b>bold</b>')
 
 
+Other features
+~~~~~~~~~~~~~~
+
+The default tag separators can be changed by passing the ``tag_sep`` argument to
+``AnsiMarkup``:
+
+
+.. code-block:: python
+
+  from ansimarkup import AnsiMarkup
+
+  am = AnsiMarkup(tag_sep='{}')
+  am.parse('{b}{r}bold red{/b}{/r}
+
+
 Command-line
 ~~~~~~~~~~~~
 

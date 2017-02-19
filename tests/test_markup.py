@@ -59,6 +59,19 @@ def test_usertags():
 	assert am.parse('<call>1</call>') == F.BLUE  + B.RED + '1' + S.RESET_ALL
 
 
+def test_tag_chars():
+	with raises(ValueError):
+		am = AnsiMarkup(tag_sep='{')
+
+	with raises(ValueError):
+		am = AnsiMarkup(tag_sep='qq')
+
+	am = AnsiMarkup(tag_sep='{}')
+
+	r1 = p('0<b>1<d>2</d>3</b>4')
+	r2 = am.parse('0{b}1{d}2{/d}3{/b}4')
+	assert r1 == r2 == '0' + S.BRIGHT + '1' + S.DIM + '2' + S.RESET_ALL + S.BRIGHT + '3' + S.RESET_ALL + '4'
+
 @mark.xfail
 def test_limitations():
 	assert p('<r><Y>1</r>2</Y>') == F.RED + B.YELLOW + '1' + S.RESET_ALL + B.YELLOW + '2' + S.RESET_ALL

@@ -48,12 +48,14 @@ def test_options():
 
 def test_usertags():
 	user_tags = {
-		'info': F.GREEN + S.BRIGHT,
+		'info':  F.GREEN + S.BRIGHT,
+		'info1': p('<g><b>'),
 		'call': lambda: F.BLUE + B.RED
 	}
 	am = AnsiMarkup(tags=user_tags)
 
 	assert am.parse('<info>1</info>') == F.GREEN + S.BRIGHT + '1' + S.RESET_ALL
+	assert am.parse('<info>1</info>') == am.parse('<info1>1</info1>')
 	assert am.parse('<call>1</call>') == F.BLUE  + B.RED + '1' + S.RESET_ALL
 
 

@@ -20,10 +20,20 @@ class AnsiMarkup:
     re_tag_end   = re.compile(r'</([^>]+)>')
 
     def __init__(self, tags=None, always_reset=False):
+        '''
+        Arguments
+        ---------
+        tags: dict
+           User-supplied tags, which are a mapping of tag names to the strings
+           they will be substituted with.
+        always_reset: bool
+           Whether or not ``parse()`` should always end strings with a reset code.
+        '''
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
 
     def parse(self, text):
+        '''Return a string with markup tags converted to ansi-escape sequences.'''
         tags, results = [], []
 
         text = self.re_tag_start.sub(lambda m: self.sub_start(m, tags, results), text)
@@ -36,12 +46,12 @@ class AnsiMarkup:
         return text
 
     def ansiprint(self, *args, **kwargs):
+        '''Wrapper around builtins.print() that runs parse() on all arguments first.'''
         args = (self.parse(str(i)) for i in args)
         builtins.print(*args, **kwargs)
 
     def strip(self, text):
         '''Return string with markup tags removed.'''
-
         # TODO: This also strips unknown tags.
         text = self.re_tag_start.sub('', text)
         text = self.re_tag_end.sub('', text)

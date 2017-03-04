@@ -118,7 +118,7 @@ The default tag separators can be changed by passing the ``tag_sep`` argument to
   from ansimarkup import AnsiMarkup
 
   am = AnsiMarkup(tag_sep='{}')
-  am.parse('{b}{r}bold red{/b}{/r}
+  am.parse('{b}{r}bold red{/b}{/r}')
 
 
 Command-line

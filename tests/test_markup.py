@@ -24,6 +24,22 @@ def test_flat_colors():
 	assert p('<b,r,>1</b,r,>') == p('<bold,red,>1</bold,red,>') == S.BRIGHT + F.RED + '1' + S.RESET_ALL
 
 
+def test_xterm_color():
+	assert p('<fg 200>1</fg 200>') == '\x1b[38;5;200m' '1' '\x1b[0m'
+	assert p('<bg 100><fg 200>1')  == '\x1b[48;5;100m' '\x1b[38;5;200m' '1'
+	assert p('<fg 256>1')          == '<fg 256>1'
+
+
+def test_xterm_hex():
+	assert p('<fg #ff0000>1') == '\x1b[38;2;255;0;0m' '1'
+	assert p('<bg #00A000><fg #ff0000>1') == '\x1b[48;2;0;160;0m' '\x1b[38;2;255;0;0m' '1'
+
+
+def test_xterm_rgb():
+	assert p('<fg 255,0,0>1') == p('<fg #ff0000>1') == '\x1b[38;2;255;0;0m' '1'
+	assert p('<bg 0,160,0><fg 255,0,0>1') == p('<bg #00A000><fg #ff0000>1') == '\x1b[48;2;0;160;0m' '\x1b[38;2;255;0;0m' '1'
+
+
 def test_nested():
 	assert p('0<b>1<d>2</d>3</b>4') == '0' + S.BRIGHT + '1' + S.DIM + '2' + S.RESET_ALL + S.BRIGHT + '3' + S.RESET_ALL + '4'
 

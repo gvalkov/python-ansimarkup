@@ -15,6 +15,7 @@ Ansimarkup is an XML-like markup for producing colored terminal text.
 
   print('<b>bold text</b>'))
   print('<red>red text</red>', '<red,green>red text on a green background</red,green>')
+  print('<fg #ffaf00>orange text</fg #ffaf00>')
 
 
 Installation
@@ -56,6 +57,11 @@ Colors and styles
   parse("<fg red>red foreground</fg red>")
   parse("<bg red>red background</bg red>")
 
+  # Xterm, hex and rgb colors are accepted by the <fg> and <bg> tags.
+  parse("<fg 86>aquamarine foreground</fg 86>")
+  parse("<bg #00005f>dark blue background<bg #00005f>")
+  parse("<fg 0,95,0>dark green foreground<fg 0,95,0>")
+
   # Tags may be nested.
   parse("<r><Y>red text on a yellow foreground</Y></r>")
 
@@ -92,6 +98,9 @@ Custom tags or overrides for existing tags may be defined by creating a new
 
       # Tag names may also be callables.
       'err':  lambda: parse('<r>')
+
+      # Colors may also be given convenient tag names.
+      'orange': parse('<fg #d78700>'),
 
       # User-defined tags always take precedence over existing tags.
       'bold': parse('<dim>')

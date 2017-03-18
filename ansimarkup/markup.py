@@ -79,11 +79,27 @@ class AnsiMarkup:
 
         # An alternative syntax for setting the foreground color (e.g. <fg red>).
         elif tag.startswith('fg '):
-            res = foreground.get(tag[3:], match.group())
+            color = tag[3:]
+            if color.isdigit() and int(color) <= 255:
+                res = '\033[38;5;%sm' % color
+            elif color.startswith('#'):
+                res = '\033[38;2;%s;%s;%sm' % hex_to_rgb(color[1:])
+            elif color.count(',') == 2:
+                res = '\033[38;2;%s;%s;%sm' % tuple(color.split(','))
+            else:
+                res = foreground.get(color, match.group())
 
         # An alternative syntax for setting the background color (e.g. <bg red>).
         elif tag.startswith('bg '):
-            res = background.get(tag[3:].upper(), match.group())
+            color = tag[3:]
+            if color.isdigit() and int(color) <= 255:
+                res = '\033[48;5;%sm' % color
+            elif color.startswith('#'):
+                res = '\033[48;2;%s;%s;%sm' % hex_to_rgb(color[1:])
+            elif color.count(',') == 2:
+                res = '\033[48;2;%s;%s;%sm' % tuple(color.split(','))
+            else:
+                res = background.get(color.upper(), match.group())
 
         # Shorthand formats (e.g. <red,blue>, <bold,red,blue>).
         elif ',' in tag:
@@ -140,3 +156,8 @@ class AnsiMarkup:
         tag_start = r'{0}([^/{1}]+){1}'.format(tag_sep[0], tag_sep[1])
         tag_end   = r'{0}/([^{1}]+){1}'.format(tag_sep[0], tag_sep[1])
         return re.compile(tag_start), re.compile(tag_end)
+
+
+def hex_to_rgb(value):
+    return tuple(int(value[i:i + 2], 16) for i in (0, 2, 4))
+    #return tuple(bytes.fromhex(value))

@@ -59,8 +59,8 @@ Colors and styles
 
   # Xterm, hex and rgb colors are accepted by the <fg> and <bg> tags.
   parse("<fg 86>aquamarine foreground</fg 86>")
-  parse("<bg #00005f>dark blue background<bg #00005f>")
-  parse("<fg 0,95,0>dark green foreground<fg 0,95,0>")
+  parse("<bg #00005f>dark blue background</bg #00005f>")
+  parse("<fg 0,95,0>dark green foreground</fg 0,95,0>")
 
   # Tags may be nested.
   parse("<r><Y>red text on a yellow foreground</Y></r>")

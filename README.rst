@@ -90,10 +90,10 @@ Custom tags or overrides for existing tags may be defined by creating a new
   from ansimarkup import AnsiMarkup, parse
 
   user_tags = {
-      # Add a new tag (e.g. we want <info> to expand to '<bold><green>'
+      # Add a new tag (e.g. we want <info> to expand to "<bold><green>").
       "info": parse("<b><g>")
 
-      # ... or use the ansi escape sequence directly
+      # The ansi escape sequence can be used directly.
       "info": "e\x1b[32m\x1b[1m",
 
       # Tag names may also be callables.
@@ -216,13 +216,10 @@ Todo
 
 - Many corner cases remain to be fixed.
 
-- The documentation needs to be moved from the readme to a sphinx doc.
+- More elaborate testing. The current test suite mostly covers the
+  "happy paths".
 
-- More docstrings and comments.
-
-- The testsuite is very superficial.
-
-- The ``tag_list.index`` in ``sub_end`` can be replaced with something more
+- Replace ``tag_list.index`` in ``sub_end`` with something more
   efficient (i.e. something like an ordered MultiDict).
 
 

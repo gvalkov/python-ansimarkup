@@ -13,9 +13,9 @@ Ansimarkup is an XML-like markup for producing colored terminal text.
 
   from ansimarkup import ansiprint as print
 
-  print('<b>bold text</b>'))
-  print('<red>red text</red>', '<red,green>red text on a green background</red,green>')
-  print('<fg #ffaf00>orange text</fg #ffaf00>')
+  print("<b>bold text</b>"))
+  print("<red>red text</red>", "<red,green>red text on a green background</red,green>")
+  print("<fg #ffaf00>orange text</fg #ffaf00>")
 
 
 Installation
@@ -43,7 +43,7 @@ Basic
 
   # ansiprint() works exactly like print(), but first runs parse() on all arguments.
   ansiprint("<b>bold</b>", "<d>dim</d>")
-  ansiprint("<b>bold</b>", "<d>dim</d>", sep=':', file=sys.stderr)
+  ansiprint("<b>bold</b>", "<d>dim</d>", sep=":", file=sys.stderr)
 
 
 Colors and styles
@@ -91,28 +91,28 @@ Custom tags or overrides for existing tags may be defined by creating a new
 
   user_tags = {
       # Add a new tag (e.g. we want <info> to expand to '<bold><green>'
-      'info': parse('<b><g>')
+      "info": parse("<b><g>")
 
       # ... or use the ansi escape sequence directly
-      'info': 'e\x1b[32m\x1b[1m',
+      "info": "e\x1b[32m\x1b[1m",
 
       # Tag names may also be callables.
-      'err':  lambda: parse('<r>')
+      "err":  lambda: parse("<r>")
 
       # Colors may also be given convenient tag names.
-      'orange': parse('<fg #d78700>'),
+      "orange": parse("<fg #d78700>"),
 
       # User-defined tags always take precedence over existing tags.
-      'bold': parse('<dim>')
+      "bold": parse("<dim>")
   }
 
   am = AnsiMarkup(tags=user_tags)
 
-  am.parse('<info>bold green</info>')
-  am.ansiprint('<err>red</err>')
+  am.parse("<info>bold green</info>")
+  am.ansiprint("<err>red</err>")
 
   # Calling the instance is equivalent to calling its parse method.
-  am('<b>bold</b>') == am.parse('<b>bold</b>')
+  am("<b>bold</b>") == am.parse("<b>bold</b>")
 
 
 Other features
@@ -126,8 +126,8 @@ The default tag separators can be changed by passing the ``tag_sep`` argument to
 
   from ansimarkup import AnsiMarkup
 
-  am = AnsiMarkup(tag_sep='{}')
-  am.parse('{b}{r}bold red{/b}{/r}')
+  am = AnsiMarkup(tag_sep="{}")
+  am.parse("{b}{r}bold red{/b}{/r}")
 
 
 Command-line

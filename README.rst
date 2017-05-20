@@ -228,6 +228,7 @@ Similar libraries
 
 - pastel_: bring colors to your terminal
 - `plumbum.colors`_: small yet feature-rich library for shell script-like programs in Python
+- colr_: easy terminal colors, with chainable methods
 
 
 License
@@ -255,4 +256,5 @@ Ansimarkup is released under the terms of the `Revised BSD License`_.
 .. _colorama:       https://pypi.python.org/pypi/colorama
 .. _pastel:         https://github.com/sdispater/pastel
 .. _plumbum.colors: https://plumbum.readthedocs.io/en/latest/cli.html#colors
+.. _colr:           https://pypi.python.org/pypi/Colr/
 .. _`Revised BSD License`: https://raw.github.com/gvalkov/python-ansimarkup/master/LICENSE

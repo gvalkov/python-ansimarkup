@@ -69,9 +69,9 @@ Colors and styles
   parse("<r,y>red text on a yellow background</r,y>")
 
   # This shorthand also supports style tags.
-  parse("<b,r,y>bold red text on a yellow background</b,r,y>"
-  parse("<b,r,>bold red text</b,r,>
-  parse("<b,,y>bold regular text on a yellow background</b,,y>
+  parse("<b,r,y>bold red text on a yellow background</b,r,y>")
+  parse("<b,r,>bold red text</b,r,>")
+  parse("<b,,y>bold regular text on a yellow background</b,,y>")
 
   # Unrecognized tags are left as-is.
   parse("<b><element1></element1></b>")

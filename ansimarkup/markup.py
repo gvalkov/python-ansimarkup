@@ -14,6 +14,9 @@ class AnsiMarkupError(Exception):
 class MismatchedTag(AnsiMarkupError):
     pass
 
+class UnbalancedTag(AnsiMarkupError):
+    pass
+
 
 class AnsiMarkup:
     '''
@@ -35,14 +38,13 @@ class AnsiMarkup:
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
 
-        self.re_tag_start, self.re_tag_end = self.compile_tag_regex(tag_sep)
+        self.re_tag = self.compile_tag_regex(tag_sep)
 
     def parse(self, text):
         '''Return a string with markup tags converted to ansi-escape sequences.'''
         tags, results = [], []
 
-        text = self.re_tag_start.sub(lambda m: self.sub_start(m, tags, results), text)
-        text = self.re_tag_end.sub(lambda m: self.sub_end(m, tags, results), text)
+        text = self.re_tag.sub(lambda m: self.sub_tag(m, tags, results), text)
 
         if self.always_reset:
             if not text.endswith(Style.RESET_ALL):
@@ -57,16 +59,28 @@ class AnsiMarkup:
 
     def strip(self, text):
         '''Return string with markup tags removed.'''
-        # TODO: This also strips unknown tags.
-        text = self.re_tag_start.sub('', text)
-        text = self.re_tag_end.sub('', text)
+        tags, results = [], []
+
+        text = self.re_tag.sub(lambda m: self.clear_tag(m, tags, results), text)
+
         return text
 
     def __call__(self, text):
         return self.parse(text)
 
-    def sub_start(self, match, tag_list, res_list):
-        tag = match.group(1)
+    def sub_tag(self, match, tag_list, res_list):
+        markup, tag = match.group(0), match.group(1)
+        closing = markup[1] == '/'
+        res = None
+
+        # Early exit if the closing tag matches the last known opening tag
+        if closing and tag_list and tag_list[-1] == tag:
+            tag_list.pop()
+            res_list.pop()
+
+            res = Style.RESET_ALL + ''.join(res_list)
+
+            return res
 
         # User-defined tags take preference over all other.
         if tag in self.user_tags:
@@ -77,29 +91,26 @@ class AnsiMarkup:
         elif tag in all_tags:
             res = all_tags[tag]
 
-        # An alternative syntax for setting the foreground color (e.g. <fg red>).
-        elif tag.startswith('fg '):
-            color = tag[3:]
-            if color.isdigit() and int(color) <= 255:
-                res = '\033[38;5;%sm' % color
-            elif color.startswith('#'):
-                res = '\033[38;2;%s;%s;%sm' % hex_to_rgb(color[1:])
-            elif color.count(',') == 2:
-                res = '\033[38;2;%s;%s;%sm' % tuple(color.split(','))
-            else:
-                res = foreground.get(color, match.group())
+        # An alternative syntax for setting the color (e.g. <fg red>, <bg red>).
+        elif tag.startswith('fg ') or tag.startswith('bg '):
+            st, color = tag[:2], tag[3:]
+            code = '38' if st == 'fg' else '48'
 
-        # An alternative syntax for setting the background color (e.g. <bg red>).
-        elif tag.startswith('bg '):
-            color = tag[3:]
-            if color.isdigit() and int(color) <= 255:
-                res = '\033[48;5;%sm' % color
-            elif color.startswith('#'):
-                res = '\033[48;2;%s;%s;%sm' % hex_to_rgb(color[1:])
+            if st == 'fg' and color in foreground:
+                res = foreground[color]
+            elif st == 'bg' and color.islower() and color.upper() in background:
+                res = background[color.upper()]
+            elif color.isdigit() and int(color) <= 255:
+                res = '\033[%s;5;%sm' % (code, color)
+            elif re.match(r'#(?:[a-fA-F0-9]{3}){1,2}$', color):
+                hex_color = color[1:]
+                if len(hex_color) == 3:
+                    hex_color *= 2
+                res = '\033[%s;2;%s;%s;%sm' % ((code,) + hex_to_rgb(hex_color))
             elif color.count(',') == 2:
-                res = '\033[48;2;%s;%s;%sm' % tuple(color.split(','))
-            else:
-                res = background.get(color.upper(), match.group())
+                colors = tuple(color.split(','))
+                if all(x.isdigit() and int(x) <= 255 for x in colors):
+                    res = '\033[%s;2;%s;%s;%sm' % ((code,) + colors)
 
         # Shorthand formats (e.g. <red,blue>, <bold,red,blue>).
         elif ',' in tag:
@@ -107,45 +118,54 @@ class AnsiMarkup:
 
             if el_count == 1:
                 fg, bg = tag.split(',')
-                res = foreground.get(fg, '') + background.get(bg.upper(), '')
+                if fg in foreground and bg.islower() and bg.upper() in background:
+                    res = foreground[fg] + background[bg.upper()]
 
             elif el_count == 2:
                 st, fg, bg = tag.split(',')
-                res = style[st] + foreground.get(fg, '') + background.get(bg.upper(), '')
+                if st in style and (fg != '' or bg != ''):
+                    if fg == '' or fg in foreground:
+                        if bg == '' or (bg.islower() and bg.upper() in background):
+                            res = style[st] + foreground.get(fg, '') + background.get(bg.upper(), '')
 
         # If nothing matches, return the full tag (i.e. <unknown>text</...>).
-        else:
-            return match.group()
+        if res is None:
+            return markup
+
+        # If closing tag is known, but did not early exit, something is wrong
+        if closing:
+            if tag in tag_list:
+                raise UnbalancedTag('closing tag "%s" violates nesting rules.' % markup)
+            else:
+                raise MismatchedTag('closing tag "%s" has no corresponding opening tag' % markup)
 
         tag_list.append(tag)
         res_list.append(res)
+
         return res
 
-    def sub_end(self, match, tag_list, res_list):
-        tag = match.group(1)
+    def clear_tag(self, match, tag_list, res_list):
+        pre_length = len(tag_list)
+        try:
+            self.sub_tag(match, tag_list, res_list)
 
-        if tag_list:
-            try:
-                idx = tag_list.index(tag)
-            except ValueError:
-                raise MismatchedTag('closing tag "</%s>" has no corresponding opening tag' % tag)
+            # If list did not change, the tag is unknown
+            if len(tag_list) == pre_length:
+                return match.group(0)
 
-            res = ''.join(res_list[:idx])
+            # Otherwise, tag matched so remove it
+            else:
+                return ''
 
-            del tag_list[idx]
-            del res_list[idx]
-            return Style.RESET_ALL + res
-        else:
-            return Style.RESET_ALL
-
-        return match.group()
+        # Tag matched but is invalid, remove it anyway
+        except (UnbalancedTag, MismatchedTag):
+            return ''
 
     def compile_tag_regex(self, tag_sep):
         # Optimize the default:
         if tag_sep == '<>':
-            tag_start = re.compile(r'<([^/>]+)>')
-            tag_end   = re.compile(r'</([^>]+)>')
-            return tag_start, tag_end
+            tag_regex = re.compile(r'</?([^>]+)>')
+            return tag_regex
 
         if len(tag_sep) < 2:
             raise ValueError('tag_sep needs to have at least two element (e.g. "<>")')
@@ -153,9 +173,8 @@ class AnsiMarkup:
         if tag_sep[0] == tag_sep[1]:
             raise ValueError('opening and closing characters cannot be the same')
 
-        tag_start = r'{0}([^/{1}]+){1}'.format(tag_sep[0], tag_sep[1])
-        tag_end   = r'{0}/([^{1}]+){1}'.format(tag_sep[0], tag_sep[1])
-        return re.compile(tag_start), re.compile(tag_end)
+        tag_regex = r'{0}/?([^{1}]+){1}'.format(tag_sep[0], tag_sep[1])
+        return re.compile(tag_regex)
 
 
 def hex_to_rgb(value):

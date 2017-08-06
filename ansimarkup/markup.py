@@ -73,14 +73,11 @@ class AnsiMarkup:
         closing = markup[1] == '/'
         res = None
 
-        # Early exit if the closing tag matches the last known opening tag
+        # Early exit if the closing tag matches the last known opening tag.
         if closing and tag_list and tag_list[-1] == tag:
             tag_list.pop()
             res_list.pop()
-
-            res = Style.RESET_ALL + ''.join(res_list)
-
-            return res
+            return Style.RESET_ALL + ''.join(res_list)
 
         # User-defined tags take preference over all other.
         if tag in self.user_tags:
@@ -132,7 +129,7 @@ class AnsiMarkup:
         if res is None:
             return markup
 
-        # If closing tag is known, but did not early exit, something is wrong
+        # If closing tag is known, but did not early exit, something is wrong.
         if closing:
             if tag in tag_list:
                 raise UnbalancedTag('closing tag "%s" violates nesting rules.' % markup)

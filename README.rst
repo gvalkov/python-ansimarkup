@@ -129,7 +129,7 @@ The default tag separators can be changed by passing the ``tag_sep`` argument to
   am = AnsiMarkup(tag_sep="{}")
   am.parse("{b}{r}bold red{/b}{/r}")
 
-The markup tags can be removed using the ``strip()`` method:
+Markup tags can be removed using the ``strip()`` method:
 
 .. code-block:: python
 

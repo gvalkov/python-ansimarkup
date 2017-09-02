@@ -60,10 +60,7 @@ class AnsiMarkup:
     def strip(self, text):
         '''Return string with markup tags removed.'''
         tags, results = [], []
-
-        text = self.re_tag.sub(lambda m: self.clear_tag(m, tags, results), text)
-
-        return text
+        return self.re_tag.sub(lambda m: self.clear_tag(m, tags, results), text)
 
     def __call__(self, text):
         return self.parse(text)

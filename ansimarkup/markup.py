@@ -161,16 +161,16 @@ class AnsiMarkup:
     def compile_tag_regex(self, tag_sep):
         # Optimize the default:
         if tag_sep == '<>':
-            tag_regex = re.compile(r'</?([^>]+)>')
+            tag_regex = re.compile(r'</?([^<>]+)>')
             return tag_regex
 
-        if len(tag_sep) < 2:
-            raise ValueError('tag_sep needs to have at least two element (e.g. "<>")')
+        if len(tag_sep) != 2:
+            raise ValueError('tag_sep needs to have exactly two elements (e.g. "<>")')
 
         if tag_sep[0] == tag_sep[1]:
             raise ValueError('opening and closing characters cannot be the same')
 
-        tag_regex = r'{0}/?([^{1}]+){1}'.format(tag_sep[0], tag_sep[1])
+        tag_regex = r'{0}/?([^{0}{1}]+){1}'.format(tag_sep[0], tag_sep[1])
         return re.compile(tag_regex)
 
 

@@ -4,7 +4,7 @@ from pytest import raises, mark
 from colorama import Style as S, Fore as F, Back as B
 
 from ansimarkup import *
-from ansimarkup import parse as p
+from ansimarkup import parse as p, strip as s
 
 
 def test_flat():
@@ -141,13 +141,13 @@ def test_unknown_tags():
 
 
 def test_strip(am):
-	assert am.strip('<b>1</b>2<d>3</d>') == '123'
-	assert am.strip('<bold,red,yellow>1</bold,red,yellow>') == '1'
-	assert am.strip('<r><tag>1</tag></r>') == '<tag>1</tag>'
-	assert am.strip('<tag><r>1</r></tag>') == '<tag>1</tag>'
-	assert am.strip('<tag><r>1</tag></r>') == '<tag>1</tag>'
-	assert am.strip('<r><b>1</r></b>') == '1'
-	assert am.strip('<fg red>1<fg red>') == '1'
+	assert s('<b>1</b>2<d>3</d>') == '123'
+	assert s('<bold,red,yellow>1</bold,red,yellow>') == '1'
+	assert s('<r><tag>1</tag></r>') == '<tag>1</tag>'
+	assert s('<tag><r>1</r></tag>') == '<tag>1</tag>'
+	assert s('<tag><r>1</tag></r>') == '<tag>1</tag>'
+	assert s('<r><b>1</r></b>') == '1'
+	assert s('<fg red>1<fg red>') == '1'
 
 	am = AnsiMarkup(tags={'red':'<red>', 'b,g,r':'<b,g,r>', 'fg 1,2,3': '</fg 1,2,3>'})
 	assert am.strip('<red>1</red><b,g,r>2</b,g,r><fg 1,2,3>3</fg 1,2,3>') == '123'
@@ -171,11 +171,14 @@ def test_usertags():
 	assert am.parse('<info>1</info>') == F.GREEN + S.BRIGHT + '1' + S.RESET_ALL
 	assert am.parse('<info>1</info>') == am.parse('<info1>1</info1>')
 	assert am.parse('<call>1</call>') == F.BLUE  + B.RED + '1' + S.RESET_ALL
-
+	assert am.strip('<info1>1</info1>') == '1'
 
 def test_tag_chars():
 	with raises(ValueError):
 		am = AnsiMarkup(tag_sep='{')
+
+	with raises(ValueError):
+		am = AnsiMarkup(tag_sep='(-)')
 
 	with raises(ValueError):
 		am = AnsiMarkup(tag_sep='qq')
@@ -185,3 +188,32 @@ def test_tag_chars():
 	r1 = p('0<b>1<d>2</d>3</b>4')
 	r2 = am.parse('0{b}1{d}2{/d}3{/b}4')
 	assert r1 == r2 == '0' + S.BRIGHT + '1' + S.DIM + '2' + S.RESET_ALL + S.BRIGHT + '3' + S.RESET_ALL + '4'
+
+	assert s('<b>1</b>') == am.strip('{b}1{/b}') == '1'
+
+def test_tag_chars_conflicting():
+	assert p('<r>2 > 1</r>') == F.RED + '2 > 1' + S.RESET_ALL
+	assert p('<r>1 < 2</r>') == F.RED + '1 < 2' + S.RESET_ALL
+	assert p('<r>1 </ 2</r>') == F.RED + '1 </ 2' + S.RESET_ALL
+	assert s('<r>2 > 1</r>') == '2 > 1'
+	assert s('<r>1 < 2</r>') == '1 < 2'
+	assert s('<r>1 </ 2</r>') == '1 </ 2'
+
+	assert p('{: <10}<r>1</r>') == '{: <10}' + F.RED + '1' + S.RESET_ALL
+	assert p('{: </10}<r>1</r>') == '{: </10}' + F.RED + '1' + S.RESET_ALL
+	assert s('{: <10}<r>1</r>') == '{: <10}1'
+	assert s('{: </10}<r>1</r>') == '{: </10}1'
+
+	assert p('<r>1</r>{: >10}') == F.RED + '1' + S.RESET_ALL + '{: >10}'
+	assert s('<r>1</r>{: >10}') == '1{: >10}'
+
+	assert p('<1<r>2</r>3>') == '<1' + F.RED + '2' + S.RESET_ALL + '3>'
+	assert p('</1<r>2</r>3>') == '</1' + F.RED + '2' + S.RESET_ALL + '3>'
+	assert p('<1<r>2 < 3</r>4>') == '<1' + F.RED + '2 < 3' + S.RESET_ALL + '4>'
+	assert p('<1<r>2 </ 3</r>4>') == '<1' + F.RED + '2 </ 3' + S.RESET_ALL + '4>'
+	assert p('<1<r>3 > 2</r>4>') == '<1' + F.RED + '3 > 2' + S.RESET_ALL + '4>'
+	assert s('<1<r>2</r>3>') == '<123>'
+	assert s('</1<r>2</r>3>') == '</123>'
+	assert s('<1<r>2 < 3</r>4>') == '<12 < 34>'
+	assert s('<1<r>2 </ 3</r>4>') == '<12 </ 34>'
+	assert s('<1<r>3 > 2</r>4>') == '<13 > 24>'

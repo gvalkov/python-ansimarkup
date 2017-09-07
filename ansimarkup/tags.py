@@ -1,4 +1,4 @@
-from colorama import Fore, Back, Style
+from .ansi import Fore, Back, Style, ExtendedStyle
 
 
 style = {
@@ -6,11 +6,23 @@ style = {
     'd':  Style.DIM,
     'n':  Style.NORMAL,
     '0':  Style.RESET_ALL,
+    'h':  ExtendedStyle.HIDE,
+    'i':  ExtendedStyle.ITALIC,
+    'l':  ExtendedStyle.BLINK,
+    's':  ExtendedStyle.STRIKE,
+    'u':  ExtendedStyle.UNDERLINE,
+    'v':  ExtendedStyle.REVERSE,
 
-    'bold':    Style.BRIGHT,
-    'dim':     Style.DIM,
-    'normal':  Style.NORMAL,
-    'reset':   Style.RESET_ALL,
+    'bold':       Style.BRIGHT,
+    'dim':        Style.DIM,
+    'normal':     Style.NORMAL,
+    'reset':      Style.RESET_ALL,
+    'hide':       ExtendedStyle.HIDE,
+    'italic':     ExtendedStyle.ITALIC,
+    'blink':      ExtendedStyle.BLINK,
+    'strike':     ExtendedStyle.STRIKE,
+    'underline':  ExtendedStyle.UNDERLINE,
+    'reverse':    ExtendedStyle.REVERSE,
 }
 
 foreground = {

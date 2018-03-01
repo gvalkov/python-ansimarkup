@@ -36,7 +36,7 @@ Basic
 
 .. code-block:: python
 
-  from ansimarkup import parse, ansiprint
+  from ansimarkup import parse, ansiprint, AnsiMarkup
 
   # parse() converts the tags to the corresponding ansi escape sequence.
   parse("<b>bold</b> <d>dim</d>")
@@ -44,6 +44,10 @@ Basic
   # ansiprint() works exactly like print(), but first runs parse() on all arguments.
   ansiprint("<b>bold</b>", "<d>dim</d>")
   ansiprint("<b>bold</b>", "<d>dim</d>", sep=":", file=sys.stderr)
+
+  # AnsiMarkup() works exactly like `parse` and can be used with `len`
+  print(AnsiMarkup("<b>bold</b>"))
+  len(AnsiMarkup("<b>bold</b>"))  # == len("bold")
 
 
 Colors and styles

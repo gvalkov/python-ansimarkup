@@ -36,7 +36,7 @@ Basic
 
 .. code-block:: python
 
-  from ansimarkup import parse, ansiprint, AnsiMarkup
+  from ansimarkup import parse, ansiprint
 
   # parse() converts the tags to the corresponding ansi escape sequence.
   parse("<b>bold</b> <d>dim</d>")
@@ -44,10 +44,6 @@ Basic
   # ansiprint() works exactly like print(), but first runs parse() on all arguments.
   ansiprint("<b>bold</b>", "<d>dim</d>")
   ansiprint("<b>bold</b>", "<d>dim</d>", sep=":", file=sys.stderr)
-
-  # AnsiMarkup() works exactly like `parse` and can be used with `len`
-  print(AnsiMarkup("<b>bold</b>"))
-  len(AnsiMarkup("<b>bold</b>"))  # == len("bold")
 
 
 Colors and styles
@@ -119,6 +115,44 @@ Custom tags or overrides for existing tags may be defined by creating a new
   am("<b>bold</b>") == am.parse("<b>bold</b>")
 
 
+Alignment and length
+~~~~~~~~~~~~~~~~~~~~
+
+Aligning formatted strings can be challenging because the length of the rendered
+string is different that the number of printable characters. Consider this example:
+
+.. code-block:: python
+
+  >>> a = '| {:30} |'.format('abc')
+  >>> b = '| {:30} |'.format(parse('<b>abc</b>'))
+  >>> print(a, b, sep='\n')
+  | abc                    |
+  | abc                            |
+
+This can be addressed by using the ``ansistring`` function or the
+``AnsiMarkup.string(markup)`` method, which has the following useful properties:
+
+.. code-block:: python
+
+  >>> s = ansistring('<b>abc</b>')
+  >>> print(repr(s), '->', s)
+  <b>abc</b> -> abc  # abc is printed in bold
+  >>> len(s), len(am.parse('<b>abc</b>'), s.delta
+  3, 11, 8
+
+With the help of the ``delta`` property, it is easy to align the strings in the
+above example:
+
+.. code-block:: python
+
+  >>> s = ansistring('<b>abc</b>')
+  >>> a = '| {:{width}} |'.format('abc', width=30)
+  >>> b = '| {:{width}} |'.format(s, width=(30 + s.delta))
+  >>> print(a, b, sep='\n')
+  | abc                            |
+  | abc                            |
+
+
 Other features
 ~~~~~~~~~~~~~~
 
@@ -145,7 +179,7 @@ Markup tags can be removed using the ``strip()`` method:
 Command-line
 ~~~~~~~~~~~~
 
-Ansimarkup may also be used as a command-line script. This works as if all
+Ansimarkup may also be used on the command-line. This works as if all
 arguments were passed to ``ansiprint()``::
 
   $ python -m ansimarkup "<b>bold</b>" "<red>red</red>"

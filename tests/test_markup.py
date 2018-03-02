@@ -218,33 +218,17 @@ def test_tag_chars_conflicting():
 	assert s('<1<r>2 </ 3</r>4>') == '<12 </ 34>'
 	assert s('<1<r>3 > 2</r>4>') == '<13 > 24>'
 
-def test_immutable_object():
-	assert len(AnsiMarkup("A <b>bold</b> tag.")) == len("A bold tag.")
-	assert len(AnsiMarkup('<fg 256,120,120>1</fg 256,120,120>')) == len('<fg 256,120,120>1</fg 256,120,120>')
-	assert len(AnsiMarkup('<b,r,y>1</b,r,y>')) == len(AnsiMarkup('<bold,red,yellow>1</bold,red,yellow>')) == len('1')
 
-	# Example:
-	#
-	# normal_text = "Normal Text"
-	# colored_text = AnsiMarkup("Some <cyan>colored</cyan> text")
-	# solved = AnsiMarkup("<green>SOLVED</green>")
-	# processing = "PROCESSING"
-    #
-	# def prc_line(tag, status):
-	# 	try:
-	# 		delta = tag.delta
-	# 	except AttributeError:
-	# 		delta = 0
-	# 	print("{{:{}}}[{}]".format(80 - len(status) - 2 + delta, status).format(tag))
-    #
-	# print("")
-	# prc_line(normal_text, processing)
-	# prc_line(normal_text, solved)
-	# prc_line(colored_text, processing)
-	# prc_line(colored_text, solved)
-    #
-	# print("| {:28} |".format(normal_text))
-	# print("| {:28} |".format(colored_text))
-    #
-	# print("| {{:{}}} |".format(28).format(normal_text))
-	# print("| {{:{}}} |".format(28 + colored_text.delta).format(colored_text))
+def test_string_method(am):
+	assert len(am.ansistring('A <b>bold</b> tag.')) == len('A bold tag.')
+	assert len(am.ansistring('<fg 256,120,120>1</fg 256,120,120>')) == len('<fg 256,120,120>1</fg 256,120,120>')
+	assert len(am.ansistring('<b,r,y>1</b,r,y>')) == len(am.ansistring('<bold,red,yellow>1</bold,red,yellow>')) == len('1')
+
+
+def test_string_method_delta(am):
+	markup = am.ansistring('<b>abc</b>')
+	assert markup.delta == 8
+
+	a = '| {:{width}} |'.format('abc', width=28)
+	b = '| {:{width}} |'.format(markup, width=(28 + markup.delta))
+	assert len(a) == (len(b) - markup.delta)

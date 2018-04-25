@@ -23,7 +23,7 @@ class AnsiMarkup:
     Produce colored terminal text with a tag-based markup.
     '''
 
-    def __init__(self, tags=None, always_reset=False, tag_sep='<>', ansistring_cls=None):
+    def __init__(self, tags=None, always_reset=False, strict=False, tag_sep='<>', ansistring_cls=None):
         '''
         Arguments
         ---------
@@ -32,6 +32,8 @@ class AnsiMarkup:
            they will be substituted with.
         always_reset: bool
            Whether or not ``parse()`` should always end strings with a reset code.
+        strict: bool
+           Whether or not ``parse()`` should raise an error for missing closing tags.
         tag_sep: str
            The opening and closing characters of each tag (e.g. ``<>``, ``{}``).
         ansistring_cls: type
@@ -39,6 +41,8 @@ class AnsiMarkup:
         '''
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
+        self.strict = strict
+        self.tag_sep = tag_sep
         self.ansistring_cls = ansistring_cls if ansistring_cls else AnsiMarkupString
 
         self.re_tag = self.compile_tag_regex(tag_sep)
@@ -48,6 +52,10 @@ class AnsiMarkup:
         tags, results = [], []
 
         text = self.re_tag.sub(lambda m: self.sub_tag(m, tags, results), text)
+
+        if self.strict and tags:
+            markup = "%s%s%s" % (self.tag_sep[0], tags.pop(0), self.tag_sep[1])
+            raise MismatchedTag('opening tag "%s" has no corresponding closing tag' % markup)
 
         if self.always_reset:
             if not text.endswith(Style.RESET_ALL):

@@ -116,6 +116,19 @@ def test_unbalanced_error():
 		p('<r><Y><r></r></r></Y>')
 
 
+def test_strict_parsing():
+	am = AnsiMarkup(strict=True)
+
+	with raises(MismatchedTag):
+		am.parse('<b>')
+
+	with raises(MismatchedTag):
+		am.parse('<Y><b></b>')
+
+	with raises(MismatchedTag):
+		am.parse('<b><b></b>')
+
+
 def test_unknown_tags():
 	assert p('<tag>1</tag>') == '<tag>1</tag>'
 	assert p('<tag>') == '<tag>'

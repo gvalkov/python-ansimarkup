@@ -159,7 +159,6 @@ Other features
 The default tag separators can be changed by passing the ``tag_sep`` argument to
 ``AnsiMarkup``:
 
-
 .. code-block:: python
 
   from ansimarkup import AnsiMarkup
@@ -175,6 +174,18 @@ Markup tags can be removed using the ``strip()`` method:
 
   am = AnsiMarkup()
   am.strip("<b><r>bold red</b></r>")
+
+The ``strict`` option instructs the parser to raise ``MismatchedTag`` if opening
+tags don't have corresponding closing tags:
+
+.. code-block:: python
+
+  from ansimarkup import AnsiMarkup
+
+  am = AnsiMarkup(strict=True)
+  am.parse("<r><b>bold red")
+  # ansimarkup.MismatchedTag: opening tag "<r>" has no corresponding closing tag
+
 
 Command-line
 ~~~~~~~~~~~~

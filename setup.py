@@ -33,12 +33,15 @@ extras_require = {
     ]
 }
 
+with open("README.rst", "rb") as file:
+    readme = file.read().decode("utf-8")
+
 kw = {
     'name':                 'ansimarkup',
     'version':              '1.4.0',
 
     'description':          'Produce colored terminal text with an xml-like markup',
-    'long_description':     open('README.rst').read(),
+    'long_description':     readme,
 
     'author':               'Georgi Valkov',
     'author_email':         'georgi.t.valkov@gmail.com',

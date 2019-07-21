@@ -165,12 +165,13 @@ def test_strip(am):
 	am = AnsiMarkup(tags={'red':'<red>', 'b,g,r':'<b,g,r>', 'fg 1,2,3': '</fg 1,2,3>'})
 	assert am.strip('<red>1</red><b,g,r>2</b,g,r><fg 1,2,3>3</fg 1,2,3>') == '123'
 
+
 def test_options():
 	am = AnsiMarkup(always_reset=True)
-	am.parse('<b>1') == S.BRIGHT + '1' + S.RESET_ALL
+	assert am.parse('<b>1') == S.BRIGHT + '1' + S.RESET_ALL
 
 	am = AnsiMarkup(always_reset=False)
-	am.parse('<b>1') == S.BRIGHT + '1'
+	assert am.parse('<b>1') == S.BRIGHT + '1'
 
 
 def test_usertags():

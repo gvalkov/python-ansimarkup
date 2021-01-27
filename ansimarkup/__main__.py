@@ -1,5 +1,5 @@
 from sys import argv, exit
-from . import print_function
+from . import ansiprint
 
 
 if len(argv) == 1:
@@ -15,4 +15,4 @@ if len(argv) == 1:
     print(dedent(usage).strip())
     exit(0)
 else:
-    print_function(*argv[1:])
+    ansiprint(*argv[1:])

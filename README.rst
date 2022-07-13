@@ -91,13 +91,13 @@ Custom tags or overrides for existing tags may be defined by creating a new
 
   user_tags = {
       # Add a new tag (e.g. we want <info> to expand to "<bold><green>").
-      "info": parse("<b><g>")
+      "info": parse("<b><g>"),
 
       # The ansi escape sequence can be used directly.
       "info": "e\x1b[32m\x1b[1m",
 
       # Tag names may also be callables.
-      "err":  lambda: parse("<r>")
+      "err":  lambda: parse("<r>"),
 
       # Colors may also be given convenient tag names.
       "orange": parse("<fg #d78700>"),

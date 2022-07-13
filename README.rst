@@ -13,7 +13,7 @@ Ansimarkup is an XML-like markup for producing colored terminal text.
 
   from ansimarkup import ansiprint as print
 
-  print("<b>bold text</b>"))
+  print("<b>bold text</b>")
   print("<red>red text</red>", "<red,green>red text on a green background</red,green>")
   print("<fg #ffaf00>orange text</fg #ffaf00>")
 

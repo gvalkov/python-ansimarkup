@@ -2,8 +2,8 @@
 
 <p>
     <a href="https://pypi.python.org/pypi/ansimarkup"><img alt="pypi version" src="https://img.shields.io/pypi/v/ansimarkup.svg"></a>
-    <a href="https://github.com/gvalkov/ansimarkup/actions/workflows/tests.yml?query=branch:master"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/gvalkov/ansimarkup/tests.yml?branch=master"></a>
-    <a href="https://github.com/gvalkov/ansimarkup/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/pypi/l/ansimarkup"></a>
+    <a href="https://github.com/gvalkov/python-ansimarkup/actions/workflows/tests.yml?query=branch:main"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/gvalkov/python-ansimarkup/tests.yml?branch=main"></a>
+    <a href="https://github.com/gvalkov/python-ansimarkup/blob/main/LICENSE.txt"><img alt="License" src="https://img.shields.io/pypi/l/ansimarkup"></a>
 </p>
 
 Ansimarkup is an XML-like markup for producing colored terminal text.
@@ -242,7 +242,7 @@ different ansi escape code libraries:
 
 ## Limitations
 
-Ansimarkup is a simple wrapper around colorama. It does very little in
+Ansimarkup is a simple wrapper around [colorama]. It does very little in
 the way of validating that markup strings are well-formed. This is a
 conscious decision with the goal of keeping things simple and fast.
 
@@ -267,10 +267,10 @@ incorrect output:
 
 Ansimarkup is released under the terms of the [Revised BSD License].
 
-  [tags.py]: https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/tags.py
+  [tags.py]: https://github.com/gvalkov/python-ansimarkup/blob/main/ansimarkup/tags.py
   [colorama]: https://pypi.python.org/pypi/colorama
-  [benchmark.py]: https://github.com/gvalkov/python-ansimarkup/blob/master/tests/benchmark.py
+  [benchmark.py]: https://github.com/gvalkov/python-ansimarkup/blob/main/tests/benchmark.py
   [pastel]: https://github.com/sdispater/pastel
   [plumbum.colors]: https://plumbum.readthedocs.io/en/latest/cli.html#colors
   [colr]: https://pypi.python.org/pypi/Colr/
-  [Revised BSD License]: https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/LICENSE.txt
+  [Revised BSD License]: https://github.com/gvalkov/python-ansimarkup/blob/main/LICENSE.txt

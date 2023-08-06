@@ -9,6 +9,9 @@ classifiers = [
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Libraries',
     'License :: OSI Approved :: BSD License',
@@ -35,7 +38,7 @@ extras_require = {
 
 kw = {
     'name':                 'ansimarkup',
-    'version':              '1.4.0',
+    'version':              '1.4.1',
 
     'description':          'Produce colored terminal text with an xml-like markup',
     'long_description':     open('README.rst').read(),

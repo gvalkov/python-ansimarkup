@@ -1,4 +1,4 @@
-from . markup import AnsiMarkup, AnsiMarkupError, MismatchedTag, UnbalancedTag
+from .markup import AnsiMarkup, AnsiMarkupError, MismatchedTag, UnbalancedTag
 
 
 _ansimarkup = AnsiMarkup()
@@ -8,4 +8,4 @@ ansiprint = _ansimarkup.ansiprint
 ansistring = _ansimarkup.ansistring
 
 
-__all__ = 'AnsiMarkup', 'AnsiMarkupError', 'MismatchedTag', 'UnbalancedTag', 'parse', 'strip', 'ansiprint', 'ansistring'
+__all__ = "AnsiMarkup", "AnsiMarkupError", "MismatchedTag", "UnbalancedTag", "parse", "strip", "ansiprint", "ansistring"

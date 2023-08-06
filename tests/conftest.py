@@ -4,4 +4,4 @@ from ansimarkup import AnsiMarkup
 
 @fixture()
 def am():
-	return AnsiMarkup()
+    return AnsiMarkup()

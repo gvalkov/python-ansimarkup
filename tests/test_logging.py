@@ -13,13 +13,14 @@ from ansimarkup import parse as p
 class CaptureLogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self, io.StringIO())
-        self.records  = []
-        self.output = ''
+        self.records = []
+        self.output = ""
 
         if sys.version_info < (3, 0):
             old_write = self.stream.write
+
             def write(data):
-                data = unicode(data.encode('utf8'))
+                data = unicode(data.encode("utf8"))
                 old_write(data)
 
             self.stream.write = write
@@ -37,7 +38,7 @@ class CaptureLogHandler(logging.StreamHandler):
 
 @fixture
 def caplog():
-    log = logging.Logger('test')
+    log = logging.Logger("test")
     hdl = CaptureLogHandler()
     fmt = AnsiMarkupFormatter()
 
@@ -50,5 +51,5 @@ def caplog():
 def test_basic(caplog):
     log, hdl = caplog
 
-    log.info('<b>1</b>')
-    assert hdl.last_msg == S.BRIGHT + '1' + S.RESET_ALL
+    log.info("<b>1</b>")
+    assert hdl.last_msg == S.BRIGHT + "1" + S.RESET_ALL

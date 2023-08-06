@@ -14,4 +14,5 @@ class AnsiMarkupFormatter(logging.Formatter):
         message = self.ansimarkup.parse(message)
         return message
 
+
 # TODO: Add stream handler that strips tags when the output stream is not a tty.

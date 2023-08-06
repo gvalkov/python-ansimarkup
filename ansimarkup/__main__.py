@@ -4,7 +4,8 @@ from . import ansiprint, parse
 
 if len(argv) == 1 and stdin.isatty():
     from textwrap import dedent
-    usage = '''
+
+    usage = """
     Usage: python -m ansimarkup [<arg> [<arg> ...]]
 
     Example usage:
@@ -12,7 +13,7 @@ if len(argv) == 1 and stdin.isatty():
       python -m ansimarkup '<b><r>Bold Red</r></b>'
       python -m ansimarkup < input-with-markup.txt
       echo '<b>Bold</b>' | python -m ansimarkup
-    '''
+    """
 
     print(dedent(usage).strip())
     exit(0)

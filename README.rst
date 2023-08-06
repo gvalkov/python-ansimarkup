@@ -193,7 +193,14 @@ Command-line
 Ansimarkup may also be used on the command-line. This works as if all
 arguments were passed to ``ansiprint()``::
 
-  $ python -m ansimarkup "<b>bold</b>" "<red>red</red>"
+  $ python -m ansimarkup                                                                                                                                      [27/01/21  4:29PM 0 0s]
+  Usage: python -m ansimarkup [<arg> [<arg> ...]]
+
+  Example usage:
+    python -m ansimarkup '<b>Bold</b>' '<r>Red</r>'
+    python -m ansimarkup '<b><r>Bold Red</r></b>'
+    python -m ansimarkup < input-with-markup.txt
+    echo '<b>Bold</b>' | python -m ansimarkup
 
 
 Logging formatter

@@ -3,7 +3,7 @@
 <p>
     <a href="https://pypi.python.org/pypi/ansimarkup"><img alt="pypi version" src="https://img.shields.io/pypi/v/ansimarkup.svg"></a>
     <a href="https://github.com/gvalkov/ansimarkup/actions/workflows/tests.yml?query=branch:master"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/gvalkov/ansimarkup/tests.yml?branch=master"></a>
-    <a href="https://github.com/gvalkov/ansimarkup/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/pypi/l/ansimarkup"></a>
+    <a href="https://github.com/gvalkov/ansimarkup/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/pypi/l/ansimarkup"></a>
 </p>
 
 Ansimarkup is an XML-like markup for producing colored terminal text.
@@ -273,4 +273,4 @@ Ansimarkup is released under the terms of the [Revised BSD License].
   [pastel]: https://github.com/sdispater/pastel
   [plumbum.colors]: https://plumbum.readthedocs.io/en/latest/cli.html#colors
   [colr]: https://pypi.python.org/pypi/Colr/
-  [Revised BSD License]: https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/LICENSE
+  [Revised BSD License]: https://github.com/gvalkov/python-ansimarkup/blob/master/ansimarkup/LICENSE.txt

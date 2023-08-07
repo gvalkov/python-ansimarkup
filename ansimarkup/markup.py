@@ -1,11 +1,9 @@
-from __future__ import print_function
-
 import re
+import builtins
 
 from colorama import Style
 
 from .tags import style, background, foreground, all_tags
-from .compat import builtins
 
 
 class AnsiMarkupError(Exception):
@@ -231,5 +229,4 @@ class AnsiMarkupString(str):
 
 
 def hex_to_rgb(value):
-    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
-    # return tuple(bytes.fromhex(value))
+    return tuple(bytes.fromhex(value))

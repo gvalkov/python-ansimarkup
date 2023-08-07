@@ -19,7 +19,7 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
 ]
-requires-python = ">=2.7"
+requires-python = ">=3.6"
 dependencies = [
     "colorama",
 ]

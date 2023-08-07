@@ -1,6 +1,6 @@
 import re
 import builtins
-from typing import Callable, List, Optional, Mapping, Sequence, Type, Union, Tuple
+from typing import Callable, List, Match, Optional, Mapping, Pattern, Sequence, Type, Union, Tuple
 
 from colorama import Style
 
@@ -106,7 +106,7 @@ class AnsiMarkup:
     def __call__(self, text: str):
         return self.parse(text)
 
-    def sub_tag(self, match: re.Match, tag_list: List[str], res_list: List[str]) -> str:
+    def sub_tag(self, match: Match, tag_list: List[str], res_list: List[str]) -> str:
         markup, tag = match.group(0), match.group(1)
         closing = markup[1] == "/"
         res = None
@@ -182,7 +182,7 @@ class AnsiMarkup:
 
         return res
 
-    def clear_tag(self, match: re.Match, tag_list: List[str], res_list: List[str]) -> str:
+    def clear_tag(self, match: Match, tag_list: List[str], res_list: List[str]) -> str:
         pre_length = len(tag_list)
         try:
             self.sub_tag(match, tag_list, res_list)
@@ -199,7 +199,7 @@ class AnsiMarkup:
         except (UnbalancedTag, MismatchedTag):
             return ""
 
-    def compile_tag_regex(self, tag_sep) -> re.Pattern:
+    def compile_tag_regex(self, tag_sep) -> Pattern:
         # Optimize the default:
         if tag_sep == "<>":
             tag_regex = re.compile(r"</?([^<>]+)>")

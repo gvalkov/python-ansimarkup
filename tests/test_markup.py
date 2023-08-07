@@ -1,5 +1,7 @@
 # flake8: noqa
 
+import io
+
 from pytest import raises, mark
 from colorama import Style as S, Fore as F, Back as B
 
@@ -273,3 +275,17 @@ def test_raw(am):
     with raises(MismatchedTag):
         am.parse('<l type="V">2.0</l>')
     am.parse(am.raw('<l type="V">2.0</l>')) == '<l type="V">2.0</l>'
+
+
+def test_ansiprint(am):
+    f = io.StringIO()
+    am.ansiprint("<b>BOLD</b>", file=f, end="")
+    assert f.getvalue() == am.parse("<b>BOLD</b>") == S.BRIGHT + "BOLD" + S.RESET_ALL
+
+    f = io.StringIO()
+    am.ansiprint("<b>BOLD", "<r>BOLDRED", file=f, end="")
+    assert f.getvalue() == am.parse("<b>BOLD", " ", "<r>BOLDRED")
+
+    f = io.StringIO()
+    am.ansiprint("<b><r>", am.raw("</b</r>RAW"), "</r></b>", file=f, end="")
+    assert " </b</r>RAW " in f.getvalue()

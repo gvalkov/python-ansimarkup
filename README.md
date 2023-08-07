@@ -144,8 +144,7 @@ in the above example:
 
 ### Escaping raw strings
 
-Escaping can be done by passing a string wrapped in `raw()` either to
-`ansiprint` or `parse`.
+Both `ansiprint()` and `parse()` pass arguments of type `raw` untouched.
 
 ``` python
 >>> from ansimarkup import ansiprint, parse, raw
@@ -157,12 +156,12 @@ Escaping can be done by passing a string wrapped in `raw()` either to
 <l type='V'>2.0</l>  # printed in bold red
 ```
 
-Alternatively, you can build a template with `parse`:
+Building a template string may also be sufficient:
 
 ``` python
 >>> from ansimarkup import parse
->>> s = parse("<b><r>%s</r></b>") % "<l type='V'>2.0</l>"
->>> print(s)
+>>> s = parse("<b><r>%s</r></b>") 
+>>> print(s % "<l type='V'>2.0</l>")
 <l type='V'>2.0</l>  # printed in bold red
 ```
 

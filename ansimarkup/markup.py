@@ -1,5 +1,6 @@
 import re
 import builtins
+from typing import Callable, List, Optional, Mapping, Sequence, Type, Union, Tuple
 
 from colorama import Style
 
@@ -18,17 +19,26 @@ class UnbalancedTag(AnsiMarkupError):
     pass
 
 
+UserTagsType = Mapping[str, Union[str, Callable[[], str]]]
+
+
 class AnsiMarkup:
     """
     Produce colored terminal text with a tag-based markup.
     """
 
     def __init__(
-        self, tags=None, always_reset=False, strict=False, tag_sep="<>", ansistring_cls=None, rawstring_cls=None
+        self,
+        tags: Optional[UserTagsType] = None,
+        always_reset: Optional[bool] = False,
+        strict: Optional[bool] = False,
+        tag_sep: Sequence[str] = "<>",
+        ansistring_cls: Optional[Type[str]] = None,
+        rawstring_cls: Optional[Type[str]] = None,
     ):
         """
-        Arguments
-        ---------
+        Parameters
+        ----------
         tags: dict
            User-supplied tags, which are a mapping of tag names to the strings
            they will be substituted with.
@@ -39,10 +49,11 @@ class AnsiMarkup:
         tag_sep: str
            The opening and closing characters of each tag (e.g. ``<>``, ``{}``).
         ansistring_cls: type
-           String subtype to use in ``ansistring()`` method.
+           String subtype to use in the ``ansistring()`` method.
         rawstring_cls: type
            Strign subtype to use to designate raw strings.
         """
+
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
         self.strict = strict
@@ -52,7 +63,7 @@ class AnsiMarkup:
 
         self.re_tag = self.compile_tag_regex(tag_sep)
 
-    def parse(self, *strings, aslist=False):
+    def parse(self, *strings: str, aslist: bool = False) -> str:
         """Return a string with markup tags converted to ansi-escape sequences."""
         tags, results, res = [], [], []
 
@@ -77,28 +88,25 @@ class AnsiMarkup:
             return res
         return "".join(res)
 
-    def ansiprint(self, *args, **kwargs):
+    def ansiprint(self, *args: str, **kwargs):
         """Wrapper around builtins.print() that runs parse() on all arguments first."""
 
-        args = (str(i) if not isinstance(i, str) else i for i in args)
-        parts = self.parse(*args, aslist=True)
+        new_args = (str(i) if not isinstance(i, str) else i for i in args)
+        parts = self.parse(*new_args, aslist=True)
         builtins.print(*parts, **kwargs)
 
-        # args = (self.parse(str(i)) for i in args)
-        # builtins.print(*args, **kwargs)
-
-    def strip(self, text):
+    def strip(self, text: str):
         """Return string with markup tags removed."""
         tags, results = [], []
         return self.re_tag.sub(lambda m: self.clear_tag(m, tags, results), text)
 
-    def ansistring(self, markup):
+    def ansistring(self, markup: str):
         return self.ansistring_cls(self, markup)
 
-    def __call__(self, text):
+    def __call__(self, text: str):
         return self.parse(text)
 
-    def sub_tag(self, match, tag_list, res_list):
+    def sub_tag(self, match: re.Match, tag_list: List[str], res_list: List[str]) -> str:
         markup, tag = match.group(0), match.group(1)
         closing = markup[1] == "/"
         res = None
@@ -174,7 +182,7 @@ class AnsiMarkup:
 
         return res
 
-    def clear_tag(self, match, tag_list, res_list):
+    def clear_tag(self, match: re.Match, tag_list: List[str], res_list: List[str]) -> str:
         pre_length = len(tag_list)
         try:
             self.sub_tag(match, tag_list, res_list)
@@ -191,7 +199,7 @@ class AnsiMarkup:
         except (UnbalancedTag, MismatchedTag):
             return ""
 
-    def compile_tag_regex(self, tag_sep):
+    def compile_tag_regex(self, tag_sep) -> re.Pattern:
         # Optimize the default:
         if tag_sep == "<>":
             tag_regex = re.compile(r"</?([^<>]+)>")
@@ -243,7 +251,7 @@ class AnsiMarkupString(str):
 
         # The difference in length between the formatted string and the string
         # with markup tags stripped off.
-        new_str.delta = len(parsed) - len(new_str.stripped)
+        new_str.delta: int = len(parsed) - len(new_str.stripped)
 
         return new_str
 
@@ -254,5 +262,5 @@ class AnsiMarkupString(str):
         return self.markup
 
 
-def hex_to_rgb(value):
+def hex_to_rgb(value: str) -> Tuple[int, int, int]:
     return tuple(bytes.fromhex(value))

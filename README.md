@@ -160,7 +160,7 @@ Building a template string may also be sufficient:
 
 ``` python
 >>> from ansimarkup import parse
->>> s = parse("<b><r>%s</r></b>") 
+>>> s = parse("<b><r>%s</r></b>")
 >>> print(s % "<l type='V'>2.0</l>")
 <l type='V'>2.0</l>  # printed in bold red
 ```
@@ -249,20 +249,21 @@ processing to a minimum. The [benchmark.py] script attempts to benchmark
 different ansi escape code libraries:
 
     Benchmark 1: <r><b>red bold</b></r>
-      colorama     0.2998 μs
-      termcolor    3.2339 μs
-      colr         3.6483 μs
-      ansimarkup   6.8679 μs
-      pastel       28.8538 μs
-      plumbum      53.5004 μs
+      colorama     0.2187 μs
+      colr         2.2246 μs
+      ansimarkup   4.3115 μs
+      termcolor    5.5184 μs
+      pastel       15.8153 μs
+      plumbum      20.7330 μs
 
     Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
-      colorama     0.8269 μs
-      termcolor    8.9296 μs
-      ansimarkup   9.3099 μs
-      colr         9.6244 μs
-      pastel       62.2018 μs
-      plumbum      120.8048 μs
+      colorama     0.6065 μs
+      colr         5.7539 μs
+      ansimarkup   6.1549 μs
+      termcolor    15.8615 μs
+      pastel       33.2524 μs
+      plumbum      47.0624 μs
+
 
 ## Limitations
 

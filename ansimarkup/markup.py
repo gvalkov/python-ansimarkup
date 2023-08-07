@@ -23,7 +23,9 @@ class AnsiMarkup:
     Produce colored terminal text with a tag-based markup.
     """
 
-    def __init__(self, tags=None, always_reset=False, strict=False, tag_sep="<>", ansistring_cls=None):
+    def __init__(
+        self, tags=None, always_reset=False, strict=False, tag_sep="<>", ansistring_cls=None, rawstring_cls=None
+    ):
         """
         Arguments
         ---------
@@ -37,36 +39,53 @@ class AnsiMarkup:
         tag_sep: str
            The opening and closing characters of each tag (e.g. ``<>``, ``{}``).
         ansistring_cls: type
-           Class to use in ``ansistring()`` method.
+           String subtype to use in ``ansistring()`` method.
+        rawstring_cls: type
+           Strign subtype to use to designate raw strings.
         """
         self.user_tags = tags if tags else {}
         self.always_reset = always_reset
         self.strict = strict
         self.tag_sep = tag_sep
         self.ansistring_cls = ansistring_cls if ansistring_cls else AnsiMarkupString
+        self.rawstring_cls = self.raw = rawstring_cls if rawstring_cls else AnsiMarkupRawString
 
         self.re_tag = self.compile_tag_regex(tag_sep)
 
-    def parse(self, text):
+    def parse(self, *strings, aslist=False):
         """Return a string with markup tags converted to ansi-escape sequences."""
-        tags, results = [], []
+        tags, results, res = [], [], []
 
-        text = self.re_tag.sub(lambda m: self.sub_tag(m, tags, results), text)
+        def re_sub(m):
+            return self.sub_tag(m, tags, results)
+
+        for _str in strings:
+            if isinstance(_str, self.rawstring_cls):
+                res.append(_str)
+            else:
+                res.append(self.re_tag.sub(re_sub, _str))
 
         if self.strict and tags:
             markup = "%s%s%s" % (self.tag_sep[0], tags.pop(0), self.tag_sep[1])
             raise MismatchedTag('opening tag "%s" has no corresponding closing tag' % markup)
 
         if self.always_reset:
-            if not text.endswith(Style.RESET_ALL):
-                text += Style.RESET_ALL
+            if not res[-1] == Style.RESET_ALL:
+                res.append(Style.RESET_ALL)
 
-        return text
+        if aslist:
+            return res
+        return "".join(res)
 
     def ansiprint(self, *args, **kwargs):
         """Wrapper around builtins.print() that runs parse() on all arguments first."""
-        args = (self.parse(str(i)) for i in args)
-        builtins.print(*args, **kwargs)
+
+        args = (str(i) if not isinstance(i, str) else i for i in args)
+        parts = self.parse(*args, aslist=True)
+        builtins.print(*parts, **kwargs)
+
+        # args = (self.parse(str(i)) for i in args)
+        # builtins.print(*args, **kwargs)
 
     def strip(self, text):
         """Return string with markup tags removed."""
@@ -84,6 +103,9 @@ class AnsiMarkup:
         closing = markup[1] == "/"
         res = None
 
+        # Debug:
+        # print(f"{markup=} {tag=} {tag_list=} {res_list=}")
+
         # Early exit if the closing tag matches the last known opening tag.
         if closing and tag_list and tag_list[-1] == tag:
             tag_list.pop()
@@ -92,8 +114,8 @@ class AnsiMarkup:
 
         # User-defined tags take preference over all other.
         if tag in self.user_tags:
-            utag = self.user_tags[tag]
-            res = utag() if callable(utag) else utag
+            user_tag = self.user_tags[tag]
+            res = user_tag() if callable(user_tag) else user_tag
 
         # Substitute on a direct match.
         elif tag in all_tags:
@@ -185,12 +207,16 @@ class AnsiMarkup:
         return re.compile(tag_regex)
 
 
+class AnsiMarkupRawString(str):
+    pass
+
+
 class AnsiMarkupString(str):
     """
     A string containing the original markup, the formatted string and the
     string with tags stripped off. Example usage::
 
-      >>> t = AnsiMarkup().string('<b>abc</b>')
+      >>> t = AnsiMarkup().ansistring('<b>abc</b>')
       >>> repr(t)
       <b>abc</b>
 

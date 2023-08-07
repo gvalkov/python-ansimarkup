@@ -3,7 +3,7 @@
 from pytest import raises, mark
 from colorama import Style as S, Fore as F, Back as B
 
-from ansimarkup import *
+from ansimarkup import AnsiMarkup, MismatchedTag, UnbalancedTag
 from ansimarkup import parse as p, strip as s
 
 
@@ -263,3 +263,13 @@ def test_string_method_delta(am):
     a = "| {:{width}} |".format("abc", width=28)
     b = "| {:{width}} |".format(markup, width=(28 + markup.delta))
     assert len(a) == (len(b) - markup.delta)
+
+
+def test_raw(am):
+    a = am.parse("<b><r>", am.raw("</b</r>RAW"), "</r></b>")
+    b = S.BRIGHT + F.RED + "</b</r>RAW" + S.RESET_ALL + S.BRIGHT + S.RESET_ALL
+    assert a == b
+
+    with raises(MismatchedTag):
+        am.parse('<l type="V">2.0</l>')
+    am.parse(am.raw('<l type="V">2.0</l>')) == '<l type="V">2.0</l>'

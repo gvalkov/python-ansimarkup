@@ -142,6 +142,31 @@ in the above example:
 | abc                            |
 ```
 
+### Escaping raw strings
+
+Escaping can be done by passing a string wrapped in `raw()` either to
+`ansiprint` or `parse`.
+
+``` python
+>>> from ansimarkup import ansiprint, parse, raw
+>>> ansiprint("<b><r>", raw("<l type='V'>2.0</l>"), "</r></b>")
+ <l type='V'>2.0</l>  # printed in bold red (note the leading space caused)
+
+>>> s = parse("<b><r>", raw("<l type='V'>2.0</l>"), "</r></b>")
+>>> print(s)
+<l type='V'>2.0</l>  # printed in bold red
+```
+
+Alternatively, you can build a template with `parse`:
+
+``` python
+>>> from ansimarkup import parse
+>>> s = parse("<b><r>%s</r></b>") % "<l type='V'>2.0</l>"
+>>> print(s)
+<l type='V'>2.0</l>  # printed in bold red
+```
+
+
 ### Other features
 
 The default tag separators can be changed by passing the `tag_sep`

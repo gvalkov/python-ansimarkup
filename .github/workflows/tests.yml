@@ -24,8 +24,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m pip install pytest colorama
+          python -m pip install pytest pytest-cov colorama
       - name: Pytest
         run: |
           # Can't use 'pip install -e' because setuptools >=61.0 is not available for Python 3.6
-          PYTHONPATH="." pytest
+          PYTHONPATH="." pytest --cov=ansimarkup tests

@@ -29,7 +29,6 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-  "tox",
   "pytest",
   "pytest-cov"
 ]

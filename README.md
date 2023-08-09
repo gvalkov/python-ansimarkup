@@ -110,7 +110,7 @@ Aligning formatted strings can be challenging because the length of the
 rendered string is different that the number of printable characters.
 Consider this example:
 
-``` python
+``` pycon
 >>> a = '| {:30} |'.format('abc')
 >>> b = '| {:30} |'.format(parse('<b>abc</b>'))
 >>> print(a, b, sep='\n')
@@ -122,7 +122,7 @@ This can be addressed by using the `ansistring` function or the
 `AnsiMarkup.string(markup)` method, which has the following useful
 properties:
 
-``` python
+``` pycon
 >>> s = ansistring('<b>abc</b>')
 >>> print(repr(s), '->', s)
 <b>abc</b> -> abc  # abc is printed in bold
@@ -133,7 +133,7 @@ properties:
 With the help of the `delta` property, it is easy to align the strings
 in the above example:
 
-``` python
+``` pycon
 >>> s = ansistring('<b>abc</b>')
 >>> a = '| {:{width}} |'.format('abc', width=30)
 >>> b = '| {:{width}} |'.format(s, width=(30 + s.delta))
@@ -146,7 +146,7 @@ in the above example:
 
 Both `ansiprint()` and `parse()` pass arguments of type `raw` untouched.
 
-``` python
+``` pycon
 >>> from ansimarkup import ansiprint, parse, raw
 >>> ansiprint("<b><r>", raw("<l type='V'>2.0</l>"), "</r></b>")
  <l type='V'>2.0</l>  # printed in bold red (note the leading space caused)
@@ -158,7 +158,7 @@ Both `ansiprint()` and `parse()` pass arguments of type `raw` untouched.
 
 Building a template string may also be sufficient:
 
-``` python
+``` pycon
 >>> from ansimarkup import parse
 >>> s = parse("<b><r>%s</r></b>")
 >>> print(s % "<l type='V'>2.0</l>")

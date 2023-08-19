@@ -7,8 +7,8 @@ class AnsiExtendedStyle(AnsiCodes):
     UNDERLINE = 4
     BLINK = 5
     REVERSE = 7
-    STRIKE = 8
-    HIDE = 9
+    HIDE = 8
+    STRIKE = 9
 
 
 ExtendedStyle = AnsiExtendedStyle()

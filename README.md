@@ -249,20 +249,22 @@ processing to a minimum. The [benchmark.py] script attempts to benchmark
 different ansi escape code libraries:
 
     Benchmark 1: <r><b>red bold</b></r>
-      colorama     0.2187 μs
-      colr         2.2246 μs
-      ansimarkup   4.3115 μs
-      termcolor    5.5184 μs
-      pastel       15.8153 μs
-      plumbum      20.7330 μs
-
+      colorama     0.1959 μs
+      colr         1.8022 μs
+      ansimarkup   3.1681 μs
+      termcolor    5.3734 μs
+      rich         9.0673 μs
+      pastel       10.7440 μs
+      plumbum      14.0620 μs
+    
     Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
-      colorama     0.6065 μs
-      colr         5.7539 μs
-      ansimarkup   6.1549 μs
-      termcolor    15.8615 μs
-      pastel       33.2524 μs
-      plumbum      47.0624 μs
+      colorama     0.5360 μs
+      colr         4.5575 μs
+      ansimarkup   4.5727 μs
+      termcolor    15.8462 μs
+      rich         21.2631 μs
+      pastel       22.9391 μs
+      plumbum      33.1179 μs
 
 
 ## Limitations
@@ -287,6 +289,7 @@ incorrect output:
 -   [pastel][]: bring colors to your terminal
 -   [plumbum.colors][]: small yet feature-rich library for shell script-like programs in Python
 -   [colr][]: easy terminal colors, with chainable methods
+-   [rich][]: rich text and beautiful formatting in the terminal (see `rich.print()` and `rich.markup.render()`)
 
 ## License
 
@@ -298,4 +301,5 @@ Ansimarkup is released under the terms of the [Revised BSD License].
   [pastel]: https://github.com/sdispater/pastel
   [plumbum.colors]: https://plumbum.readthedocs.io/en/latest/cli.html#colors
   [colr]: https://pypi.python.org/pypi/Colr/
+  [rich]: https://github.com/Textualize/rich
   [Revised BSD License]: https://github.com/gvalkov/python-ansimarkup/blob/main/LICENSE.txt

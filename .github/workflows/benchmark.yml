@@ -1,0 +1,21 @@
+name: Benchmark
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          python3 -m pip install -e .[benchmark]
+      - name: Benchmark
+        run: |
+          python3 tests/benchmark.py 

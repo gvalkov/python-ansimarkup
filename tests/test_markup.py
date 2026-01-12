@@ -67,7 +67,7 @@ def test_xterm_color():
 def test_xterm_hex():
     assert p("<fg #ff0000>1") == p("<fg #FF0000>1") == "\x1b[38;2;255;0;0m" "1"
     assert p("<bg #00A000><fg #ff0000>1") == "\x1b[48;2;0;160;0m" "\x1b[38;2;255;0;0m" "1"
-    assert p("<fg #F12>1</fg #F12>") == p("<fg #F12F12>1</fg #F12F12>") == "\x1b[38;2;241;47;18m" + "1" + S.RESET_ALL
+    assert p("<fg #F12>1</fg #F12>") == p("<fg #FF1122>1</fg #FF1122>") == "\x1b[38;2;255;17;34m" + "1" + S.RESET_ALL
 
     assert p("<fg #>1</fg #>") == "<fg #>1</fg #>"
     assert p("<bg #12>1</bg #12>") == "<bg #12>1</bg #12>"

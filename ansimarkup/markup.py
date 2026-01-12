@@ -143,7 +143,8 @@ class AnsiMarkup:
             elif re.match(r"#(?:[a-fA-F0-9]{3}){1,2}$", color):
                 hex_color = color[1:]
                 if len(hex_color) == 3:
-                    hex_color *= 2
+                    r, g, b = hex_color
+                    hex_color = r * 2 + g * 2 + b * 2
                 res = "\033[%s;2;%s;%s;%sm" % ((code,) + hex_to_rgb(hex_color))
             elif color.count(",") == 2:
                 colors = tuple(color.split(","))

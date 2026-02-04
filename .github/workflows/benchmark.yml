@@ -8,16 +8,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python 3.x
-        uses: actions/setup-python@v5
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: "3.x"
+          enable-cache: true
 
-      - name: Install dependencies
-        run: |
-          python3 -m pip install -e .[benchmark]
+      - name: Install project
+        run: uv sync --locked --group benchmark
 
       - name: Benchmark
         run: |
-          python3 tests/benchmark.py 
+          uv run python3 tests/benchmark.py 

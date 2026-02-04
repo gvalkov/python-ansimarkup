@@ -249,22 +249,20 @@ processing to a minimum. The [benchmark.py] script attempts to benchmark
 different ansi escape code libraries:
 
     Benchmark 1: <r><b>red bold</b></r>
-      colorama     0.1959 μs
-      colr         1.8022 μs
-      ansimarkup   3.1681 μs
-      termcolor    5.3734 μs
-      rich         9.0673 μs
-      pastel       10.7440 μs
-      plumbum      14.0620 μs
-    
+      colorama     0.0873 μs
+      termcolor    0.4854 μs
+      ansimarkup   1.5728 μs
+      rich         4.1645 μs
+      pastel       4.4223 μs
+      plumbum      6.7151 μs
+
     Benchmark 2: <r><b>red bold</b>red</r><b>bold</b>
-      colorama     0.5360 μs
-      colr         4.5575 μs
-      ansimarkup   4.5727 μs
-      termcolor    15.8462 μs
-      rich         21.2631 μs
-      pastel       22.9391 μs
-      plumbum      33.1179 μs
+      colorama     0.1799 μs
+      termcolor    1.0695 μs
+      ansimarkup   2.2035 μs
+      rich         9.4981 μs
+      pastel       9.8800 μs
+      plumbum      15.2062 μs
 
 
 ## Limitations

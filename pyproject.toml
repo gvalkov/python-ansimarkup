@@ -34,7 +34,6 @@ test = [
 ]
 benchmark = [
   "termcolor",
-  "colr",
   "pastel",
   "plumbum",
   "rich",
